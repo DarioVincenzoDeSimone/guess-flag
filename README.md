@@ -24,11 +24,12 @@ When your child says *"can we add a timer?"* or *"why is that flag so simple?"*,
 
 This game is part of a collection built game by game as children grow:
 
-| Game | Description |
-|---|---|
-| [**L'Impiccato**](../Impiccato) | Classic Hangman in Italian & English |
-| **Guess Flag!** | World flags geography game *(this project)* |
-| *More coming…* | Each game designed by a parent who cares |
+| Game | Description | Live |
+|---|---|---|
+| [**L'Impiccato**](https://github.com/DarioVincenzoDeSimone/impiccato) | Classic Hangman — Italian vocabulary, multiplayer mode | [▶ Play](https://DarioVincenzoDeSimone.github.io/impiccato/) |
+| **Guess Flag!** | World-flags geography quiz — 195 countries, two modes *(this project)* | [▶ Play](https://DarioVincenzoDeSimone.github.io/guess-flag/) |
+| [**Guess Brand!**](https://github.com/DarioVincenzoDeSimone/guess-brand) | Car-brand logo quiz — 44 brands, two modes | [▶ Play](https://DarioVincenzoDeSimone.github.io/guess-brand/) |
+| *More coming…* | Each game designed by a parent who cares | |
 
 The suite shares a visual identity so switching between games feels seamless.
 
