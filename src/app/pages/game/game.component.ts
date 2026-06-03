@@ -127,7 +127,7 @@ const LIVES = [0, 1, 2] as const;
                 [disabled]="game.roundComplete() || isWrong"
                 (click)="game.selectOption(flag)"
                 [attr.aria-label]="s.language() === 'it' ? flag.nameIt : flag.nameEn">
-                <img [src]="'/assets/flags/' + flag.code + '.svg'"
+                <img [src]="'assets/flags/' + flag.code + '.svg'"
                      [alt]="s.language() === 'it' ? flag.nameIt : flag.nameEn"
                      loading="lazy" class="fg-img"
                      (error)="onFlagImgError($event)">
@@ -347,7 +347,7 @@ export class GameComponent implements OnInit {
 
   readonly flagSrc = computed(() => {
     const flag = this.game.currentFlag();
-    return flag ? `/assets/flags/${flag.code}.svg` : '';
+    return flag ? `assets/flags/${flag.code}.svg` : '';
   });
 
   constructor() {

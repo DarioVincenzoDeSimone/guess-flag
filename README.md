@@ -37,17 +37,20 @@ The suite shares a visual identity so switching between games feels seamless.
 ## How to Play
 
 **Mode 1 — Guess the Country 🏳️**
-A flag appears on screen. Use the on-screen keyboard to type the country's name, letter by letter. Stuck? Use the 💡 hint to get six multiple-choice options.
+A flag appears on screen. Ten country names are shown at the bottom — tap the right one.
+You have 3 lives ❤️❤️❤️ per round. Wrong taps cost a life; lose all three and the round fails.
+The 💡 hint cuts the choices from 10 down to 5.
 
 **Mode 2 — Guess the Flag 🗺️**
-A country name appears. Pick the correct flag from a grid of ten. The hint removes five wrong options.
+A country name appears. Ten flags are shown in a grid — tap the right one.
+Same 3-life rule applies. The 💡 hint removes 5 wrong flags.
 
 Settings let you choose:
-- **Difficulty** — Easy (30 countries), Medium (~100), Hard (all ~195)
+- **Difficulty** — Easy (~30 countries), Medium (~100), Hard (all ~195)
 - **Language** — Italiano / English
 - **Sound** — On / Off
 
-Each session is 10 rounds. Score up to 10 points per round — more wrong guesses or hints reduce the score.
+Each session is 10 rounds. Score up to 10 points per round: −2 per wrong tap, −3 for using the hint. Failing a round (3 wrong taps) scores 0.
 
 ---
 

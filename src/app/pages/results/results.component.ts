@@ -48,7 +48,7 @@ import { SettingsService } from '../../services/settings.service';
         @for (r of game.roundResults(); track r.flag.code) {
           <div class="round-item" role="listitem">
             <div class="round-flag">
-              <img [ngSrc]="'/assets/flags/' + r.flag.code + '.svg'"
+              <img [ngSrc]="'assets/flags/' + r.flag.code + '.svg'"
                    width="40" height="27"
                    style="object-fit: contain; border-radius: 3px;"
                    [alt]="s.language() === 'it' ? r.flag.nameIt : r.flag.nameEn"

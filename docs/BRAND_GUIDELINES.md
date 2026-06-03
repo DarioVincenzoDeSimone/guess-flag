@@ -79,12 +79,44 @@ border-radius: 0.75rem, font-weight: 900, color: white
 border-bottom: 3–4px solid (darker variant)
 ```
 
+### Lives Row (Guess Flag)
+```
+3 × Material Icons "favorite" in a flex row, gap 0.25rem, centered
+Active: color #f87171 (red-400)
+Lost:   color #cbd5e1 (slate-300), scale 0.75
+Transition: color + transform 0.25s
+```
+
+### App Frame (desktop containment)
+```
+:host  — display:flex, justify-content:center, height:100dvh, padding:0.5rem
+.frame — width:100%, max-width:480px, max-height:900px, height:100%
+Body background (#f0f9ff / sky-50) shows outside the frame on large screens.
+```
+
 ### Game Shell
 ```
-display: flex, flex-direction: column, height: 100dvh
+display: flex, flex-direction: column, height: 100%  (NOT 100dvh — fills .frame)
 background: #e0f2fe, border: 8px solid #bae6fd, border-radius: 1.5rem
 box-shadow: inset 0 2px 16px rgba(0,0,0,0.08)
-padding: 0.75–1.5rem
+overflow: clip  (contains animations; child scroll containers still scroll)
+padding: 0.75rem, gap: 0.4rem
+```
+
+### Flag Image Cards (Guess Flag — Mode 1 hero flag)
+```
+Container: width 100%, max-width 300px, no fixed aspect-ratio (adapts to flag)
+border-radius: 0.75rem, border: 3px solid #bae6fd
+Image: width 100%, height auto — preserves each flag's natural proportions
+filter: drop-shadow(0 1px 3px rgba(0,0,0,0.12)) — outlines flag pixels
+```
+
+### Flag Option Buttons (Guess Flag — Mode 2 grid)
+```
+height: 4.5rem (72px), border-radius: 0.875rem
+border: 2.5px solid #bae6fd, background: #f0f9ff (sky-50, not white)
+Image: width 100%, height 100%, object-fit:contain
+filter: drop-shadow(0 0 2px rgba(0,0,0,0.18)) — ensures white flags stay visible
 ```
 
 ---

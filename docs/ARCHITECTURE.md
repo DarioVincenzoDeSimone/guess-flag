@@ -5,7 +5,7 @@
 | Layer | Choice | Reason |
 |---|---|---|
 | Framework | Angular 21 (standalone, zoneless) | Matches Impiccato; signals-first |
-| Styling | Tailwind CSS v4 | Matches Impiccato; zero-runtime |
+| Styling | Tailwind CSS v4 + inline component styles | Matches Impiccato; zero-runtime |
 | State | Angular Signals | Fine-grained reactivity, no RxJS overhead |
 | Routing | Angular Router + HashLocationStrategy | GitHub Pages SPA compatibility |
 | Build | `@angular/build:application` | Modern ESBuild pipeline |
@@ -22,23 +22,22 @@ src/
       flags.ts               # ~195 FlagEntry records (code, nameIt, nameEn, difficulty)
     services/
       settings.service.ts    # Difficulty, gameMode, language, sound — persisted to localStorage
-      game.service.ts        # All game state as signals; actions as methods
-      sound.service.ts       # Web Audio API beeps
+      game.service.ts        # All game state as signals; unified selectOption() for both modes
+      sound.service.ts       # Web Audio API beeps (no audio files)
     components/
-      keyboard/              # A–Z grid, highlights correct/wrong letters
       settings-modal/        # Overlays current route; emits (close)
     pages/
       home/                  # Lazy-loaded; mode+difficulty picker; starts session
       game/                  # Lazy-loaded; Mode 1 and Mode 2 rendered via @if
       results/               # Lazy-loaded; reads roundResults from GameService
-    app.ts                   # Root: <router-outlet> only
+    app.ts                   # Root: centered frame (max 480×900px) + <router-outlet>
     app.routes.ts            # Lazy routes: '' / game / results
     app.config.ts            # provideZonelessChangeDetection + provideRouter(HashLocation)
   index.html                 # lang="it", Material Icons CDN
   styles.css                 # Tailwind import + shared .btn utilities
   main.ts                    # bootstrapApplication
 public/
-  assets/flags/              # SVG files downloaded by `npm run download-flags`
+  assets/flags/              # ~196 SVG files downloaded by `npm run download-flags`
   404.html                   # SPA fallback for GitHub Pages
 scripts/
   download-flags.mjs         # Node.js script — downloads from flagcdn.com
@@ -55,42 +54,70 @@ SettingsService (localStorage) ──→ GameService ──→ game/results page
                                    calls startSession()
 ```
 
-`GameService` is a singleton (`providedIn: 'root'`). It holds:
+`GameService` is a singleton (`providedIn: 'root'`). Key signals:
 - `rounds` — 10 shuffled FlagEntry objects for the current session
-- `roundIndex` — 0–10 (10 = session complete, triggers navigation to /results)
-- `roundResults` — accumulated scores/outcomes
-- Mode 1 state: `guessedLetters`, `wrongLetterCount`, `showMultipleChoice`
-- Mode 2 state: `flagOptions`, `wrongClicks`, `correctClicked`
+- `roundIndex` — 0–10; reaching 10 triggers navigation to /results via `effect()`
+- `roundResults` — accumulated `RoundResult[]` (score, correct, hintUsed, wrongAttempts)
+- `multiChoiceOptions` — 10 country-name options for Mode 1 (hint → 5)
+- `flagOptions` — 10 flag options for Mode 2 (hint → 5)
+- `wrongClicks: Set<string>` — codes of wrong-clicked options, shared across both modes
+- `correctClicked`, `lastWrongClick` — drive CSS animations
 
-The `results` page reads `roundResults()` and `totalScore()` directly from `GameService`.
-Navigation from `game` → `results` happens inside a signal `effect()` watching `isSessionComplete`.
+Both modes share a single `selectOption(flag)` method. Wrong-click tracking is unified.
+
+### Mid-game settings reset
+
+`GameComponent.closeSettings()` compares settings before/after the modal. If
+`difficulty` or `gameMode` changed, it calls `game.restartCurrentRound()` which
+regenerates the current and remaining rounds from the new pool, then calls `initRound()`.
+
+---
+
+## Layout & Viewport
+
+`app.ts` renders a centered frame:
+```
+:host  { display: flex; height: 100dvh; padding: 0.5rem; }
+.frame { width: 100%; max-width: 480px; max-height: 900px; height: 100%; }
+```
+
+Pages use `height: 100%` (not `100dvh`) to fill the frame. The shell div inside
+each page uses `overflow: clip` to contain animations without blocking internal
+scroll containers (used by the Mode 2 flag grid).
 
 ---
 
 ## Change Detection
 
 All components use `ChangeDetectionStrategy.OnPush`. The app is zoneless
-(`provideZonelessChangeDetection()`). Angular schedules re-renders only when
-a signal read inside the component's template changes. This gives native-app
-performance on low-end mobile devices.
+(`provideZonelessChangeDetection()`). Angular re-renders only when a signal
+dependency in the template changes — essential for smooth 60fps on low-end mobile.
 
 ---
 
 ## i18n Strategy
 
-A lightweight custom translation system lives inside `SettingsService`:
-- `TRANSLATIONS` constant object: `{ key: { it: '…', en: '…' } }`
-- `s.t(key)` method: returns the string for the current `language` signal
-- Flag names come from `FlagEntry.nameIt` / `FlagEntry.nameEn`, selected at runtime
+A lightweight translation map lives inside `SettingsService`:
+- `TRANSLATIONS` constant: `{ key: { it: '…', en: '…' } }`
+- `s.t(key)` method: returns the string for the current `language()` signal
+- Flag names: `FlagEntry.nameIt` / `FlagEntry.nameEn`, selected at runtime
 
-No Angular built-in i18n or third-party libraries are used; the overhead would
-exceed the benefit for a two-language hobby game.
+No Angular built-in i18n or third-party library — overhead exceeds benefit for
+a two-language hobby game.
 
 ---
 
 ## GitHub Pages Deploy Pipeline
 
-1. `ng build --configuration production` — sets `baseHref=/guess-flag/`
-2. Output lands in `dist/guess-flag/browser/`
-3. `npx angular-cli-ghpages --dir=dist/guess-flag/browser` — force-pushes to `gh-pages`
-4. HashLocationStrategy ensures all `/#/…` routes work without server rewrites
+```
+npm run deploy
+  └─ ng build --base-href "https://DarioVincenzoDeSimone.github.io/guess-flag/"
+       └─ output: dist/guess-flag/browser/   (includes public/assets/flags/*.svg)
+  └─ npx angular-cli-ghpages --dir=dist/guess-flag/browser
+       └─ force-pushes to gh-pages branch
+```
+
+Asset paths in the app are **relative** (`assets/flags/it.svg`, no leading `/`)
+so they resolve correctly under the `/guess-flag/` base href on GitHub Pages.
+
+HashLocationStrategy: all `/#/…` routes work without server-side rewrites.

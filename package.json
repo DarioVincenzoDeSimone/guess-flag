@@ -8,7 +8,7 @@
     "build": "ng build",
     "build:prod": "ng build --configuration production",
     "watch": "ng build --watch --configuration development",
-    "deploy": "ng build --configuration production && npx angular-cli-ghpages --dir=dist/guess-flag/browser",
+    "deploy": "ng build --base-href \"https://DarioVincenzoDeSimone.github.io/guess-flag/\" && npx angular-cli-ghpages --dir=dist/guess-flag/browser",
     "download-flags": "node scripts/download-flags.mjs"
   },
   "prettier": {
