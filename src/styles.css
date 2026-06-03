@@ -1,0 +1,40 @@
+@import "tailwindcss";
+
+@layer base {
+  html, body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+  }
+  body {
+    @apply antialiased bg-sky-50 text-slate-900;
+    font-family: system-ui, sans-serif;
+  }
+}
+
+/* ── Shared button base (same tokens as Impiccato) ── */
+@layer components {
+  .btn {
+    display: inline-flex; align-items: center; justify-content: center;
+    gap: 0.5rem; padding: 0.75rem 1.25rem; border-radius: 1rem;
+    font-weight: 900; font-size: 1.125rem; border: none; cursor: pointer;
+    transition: transform 0.1s, box-shadow 0.1s, background 0.15s;
+    touch-action: manipulation;
+  }
+  .btn:active:not(:disabled) { transform: translateY(2px); box-shadow: none !important; }
+  .btn:disabled { opacity: 0.5; cursor: not-allowed; }
+  .btn--full { width: 100%; }
+
+  .btn--orange { background: #fb923c; color: white; box-shadow: 0 6px 0 #ea8c00; }
+  .btn--orange:hover:not(:disabled) { background: #f97316; }
+
+  .btn--sky { background: #0ea5e9; color: white; box-shadow: 0 6px 0 #0284c7; }
+  .btn--sky:hover:not(:disabled) { background: #0284c7; }
+
+  .btn--green { background: #22c55e; color: white; box-shadow: 0 4px 0 #16a34a; }
+  .btn--green:hover:not(:disabled) { background: #16a34a; }
+
+  .btn--yellow { background: #facc15; color: white; box-shadow: 0 4px 0 #ca8a04; }
+  .btn--yellow:hover:not(:disabled) { background: #eab308; }
+}
