@@ -2,6 +2,8 @@
 
 > *A world-flags geography game for children aged 5–10, built together.*
 
+<img width="416" height="896" alt="Image" src="https://github.com/user-attachments/assets/085c6599-8baa-4af1-bf61-feb1321ad8a1" />
+
 ---
 
 ## The Philosophy — Playing Side by Side
